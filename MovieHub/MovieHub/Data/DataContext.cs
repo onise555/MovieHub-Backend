@@ -70,7 +70,7 @@ namespace MovieHub.Data
             modelBuilder.Entity<TvSeries>()
                 .HasOne(s => s.SeriesDetail)
                 .WithOne(sd => sd.TvSeries)
-                .HasForeignKey<SeriesDetail>(sd => sd.SeriesId); // dependent side
+                .HasForeignKey<SeriesDetail>(sd => sd.SeriesId);
         }
 
 
