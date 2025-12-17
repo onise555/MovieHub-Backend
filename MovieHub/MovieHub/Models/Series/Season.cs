@@ -6,7 +6,7 @@
 
         public int SeasonNumber { get; set; }    
 
-        public string SeriesId { get; set; }    
+        public int SeriesId { get; set; }    
 
         public TvSeries TvSeries { get; set; }
 

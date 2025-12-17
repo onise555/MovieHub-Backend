@@ -12,8 +12,8 @@ using MovieHub.Data;
 namespace MovieHub.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251217183244_init")]
-    partial class init
+    [Migration("20251217190338_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,21 @@ namespace MovieHub.Migrations
                     b.ToTable("ActorMovie");
                 });
 
+            modelBuilder.Entity("ActorTvSeries", b =>
+                {
+                    b.Property<int>("ActorsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tvSeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ActorsId", "tvSeriesId");
+
+                    b.HasIndex("tvSeriesId");
+
+                    b.ToTable("ActorTvSeries");
+                });
+
             modelBuilder.Entity("CountryMovie", b =>
                 {
                     b.Property<int>("MoviesId")
@@ -53,6 +68,21 @@ namespace MovieHub.Migrations
                     b.HasIndex("countriesId");
 
                     b.ToTable("CountryMovie");
+                });
+
+            modelBuilder.Entity("CountryTvSeries", b =>
+                {
+                    b.Property<int>("TvSeriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("countriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TvSeriesId", "countriesId");
+
+                    b.HasIndex("countriesId");
+
+                    b.ToTable("CountryTvSeries");
                 });
 
             modelBuilder.Entity("DirectorMovie", b =>
@@ -100,6 +130,21 @@ namespace MovieHub.Migrations
                     b.ToTable("GenreMovie");
                 });
 
+            modelBuilder.Entity("GenreTvSeries", b =>
+                {
+                    b.Property<int>("genresId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tvSeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("genresId", "tvSeriesId");
+
+                    b.HasIndex("tvSeriesId");
+
+                    b.ToTable("GenreTvSeries");
+                });
+
             modelBuilder.Entity("LanguageMovie", b =>
                 {
                     b.Property<int>("languagesId")
@@ -113,6 +158,21 @@ namespace MovieHub.Migrations
                     b.HasIndex("moviesId");
 
                     b.ToTable("LanguageMovie");
+                });
+
+            modelBuilder.Entity("LanguageTvSeries", b =>
+                {
+                    b.Property<int>("languagesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tvSeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("languagesId", "tvSeriesId");
+
+                    b.HasIndex("tvSeriesId");
+
+                    b.ToTable("LanguageTvSeries");
                 });
 
             modelBuilder.Entity("MovieHub.Models.Actors.Actor", b =>
@@ -172,8 +232,20 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Biography")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileImg")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -256,10 +328,10 @@ namespace MovieHub.Migrations
                     b.Property<int>("LibraryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MovieId")
+                    b.Property<int?>("MovieId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeriesId")
+                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("TvSeriesId")
@@ -375,13 +447,13 @@ namespace MovieHub.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MovieId")
+                    b.Property<int?>("MovieId")
                         .HasColumnType("int");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
 
-                    b.Property<int>("SeriesId")
+                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -475,9 +547,8 @@ namespace MovieHub.Migrations
                     b.Property<int>("SeasonNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("SeriesId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TvSeriesId")
                         .HasColumnType("int");
@@ -520,21 +591,9 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ActorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CountryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CoverImg")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GenreId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LanguageId")
-                        .HasColumnType("int");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
@@ -547,14 +606,6 @@ namespace MovieHub.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActorId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("GenreId");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("TvSeries");
                 });
@@ -702,10 +753,10 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("MovieId")
+                    b.Property<int?>("MovieId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeriesId")
+                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("TvSeriesId")
@@ -740,11 +791,41 @@ namespace MovieHub.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ActorTvSeries", b =>
+                {
+                    b.HasOne("MovieHub.Models.Actors.Actor", null)
+                        .WithMany()
+                        .HasForeignKey("ActorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieHub.Models.Series.TvSeries", null)
+                        .WithMany()
+                        .HasForeignKey("tvSeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CountryMovie", b =>
                 {
                     b.HasOne("MovieHub.Models.Movies.Movie", null)
                         .WithMany()
                         .HasForeignKey("MoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieHub.Models.Countres.Country", null)
+                        .WithMany()
+                        .HasForeignKey("countriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CountryTvSeries", b =>
+                {
+                    b.HasOne("MovieHub.Models.Series.TvSeries", null)
+                        .WithMany()
+                        .HasForeignKey("TvSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -800,6 +881,21 @@ namespace MovieHub.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GenreTvSeries", b =>
+                {
+                    b.HasOne("MovieHub.Models.Genres.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("genresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieHub.Models.Series.TvSeries", null)
+                        .WithMany()
+                        .HasForeignKey("tvSeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LanguageMovie", b =>
                 {
                     b.HasOne("MovieHub.Models.Languages.Language", null)
@@ -811,6 +907,21 @@ namespace MovieHub.Migrations
                     b.HasOne("MovieHub.Models.Movies.Movie", null)
                         .WithMany()
                         .HasForeignKey("moviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LanguageTvSeries", b =>
+                {
+                    b.HasOne("MovieHub.Models.Languages.Language", null)
+                        .WithMany()
+                        .HasForeignKey("languagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieHub.Models.Series.TvSeries", null)
+                        .WithMany()
+                        .HasForeignKey("tvSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -836,9 +947,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Movies.Movie", "Movie")
                         .WithMany("LibraryItems")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MovieId");
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", "TvSeries")
                         .WithMany("LibraryItems")
@@ -887,9 +996,7 @@ namespace MovieHub.Migrations
                 {
                     b.HasOne("MovieHub.Models.Movies.Movie", "Movie")
                         .WithMany("Reviews")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MovieId");
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", "TvSeries")
                         .WithMany("Reviews")
@@ -962,25 +1069,6 @@ namespace MovieHub.Migrations
                     b.Navigation("TvSeries");
                 });
 
-            modelBuilder.Entity("MovieHub.Models.Series.TvSeries", b =>
-                {
-                    b.HasOne("MovieHub.Models.Actors.Actor", null)
-                        .WithMany("tvSeries")
-                        .HasForeignKey("ActorId");
-
-                    b.HasOne("MovieHub.Models.Countres.Country", null)
-                        .WithMany("TvSeries")
-                        .HasForeignKey("CountryId");
-
-                    b.HasOne("MovieHub.Models.Genres.Genre", null)
-                        .WithMany("tvSeries")
-                        .HasForeignKey("GenreId");
-
-                    b.HasOne("MovieHub.Models.Languages.Language", null)
-                        .WithMany("tvSeries")
-                        .HasForeignKey("LanguageId");
-                });
-
             modelBuilder.Entity("MovieHub.Models.Users.UserDetail", b =>
                 {
                     b.HasOne("MovieHub.Models.Users.User", "user")
@@ -1030,9 +1118,7 @@ namespace MovieHub.Migrations
                 {
                     b.HasOne("MovieHub.Models.Movies.Movie", "Movie")
                         .WithMany("WishListItems")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MovieId");
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", "TvSeries")
                         .WithMany("WishListItems")
@@ -1051,26 +1137,6 @@ namespace MovieHub.Migrations
                     b.Navigation("TvSeries");
 
                     b.Navigation("wishList");
-                });
-
-            modelBuilder.Entity("MovieHub.Models.Actors.Actor", b =>
-                {
-                    b.Navigation("tvSeries");
-                });
-
-            modelBuilder.Entity("MovieHub.Models.Countres.Country", b =>
-                {
-                    b.Navigation("TvSeries");
-                });
-
-            modelBuilder.Entity("MovieHub.Models.Genres.Genre", b =>
-                {
-                    b.Navigation("tvSeries");
-                });
-
-            modelBuilder.Entity("MovieHub.Models.Languages.Language", b =>
-                {
-                    b.Navigation("tvSeries");
                 });
 
             modelBuilder.Entity("MovieHub.Models.Librares.Library", b =>
