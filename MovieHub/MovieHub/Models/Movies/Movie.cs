@@ -5,6 +5,7 @@ using MovieHub.Models.Genres;
 using MovieHub.Models.Languages;
 using MovieHub.Models.Librares;
 using MovieHub.Models.Reviews;
+using MovieHub.Models.WatchHistores;
 using MovieHub.Models.WishLists;
 
 namespace MovieHub.Models.Movies
@@ -37,6 +38,8 @@ namespace MovieHub.Models.Movies
         public List<Language> languages { get; set; } = new List<Language>();
 
         public List<Country> countries { get; set; } = new List<Country>();
+
+        public List<WatchHistory> WatchHistories { get; set; }= new List<WatchHistory>();
 
 
 

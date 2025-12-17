@@ -12,8 +12,8 @@ using MovieHub.Data;
 namespace MovieHub.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251215170308_INIT")]
-    partial class INIT
+    [Migration("20251217183244_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -413,9 +413,8 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Duration")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<string>("EpisodeName")
                         .IsRequired()
@@ -634,6 +633,43 @@ namespace MovieHub.Migrations
                         .IsUnique();
 
                     b.ToTable("usersDetail");
+                });
+
+            modelBuilder.Entity("MovieHub.Models.WatchHistores.WatchHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("EpisodeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastWatchedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WatchedSeconds")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WatchHistory");
                 });
 
             modelBuilder.Entity("MovieHub.Models.WishLists.WishList", b =>
@@ -956,6 +992,29 @@ namespace MovieHub.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("MovieHub.Models.WatchHistores.WatchHistory", b =>
+                {
+                    b.HasOne("MovieHub.Models.Series.Episode", "Episode")
+                        .WithMany("WatchHistories")
+                        .HasForeignKey("EpisodeId");
+
+                    b.HasOne("MovieHub.Models.Movies.Movie", "Movie")
+                        .WithMany("WatchHistories")
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("MovieHub.Models.Users.User", "User")
+                        .WithMany("WatchHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Episode");
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MovieHub.Models.WishLists.WishList", b =>
                 {
                     b.HasOne("MovieHub.Models.Users.User", "User")
@@ -1028,6 +1087,8 @@ namespace MovieHub.Migrations
 
                     b.Navigation("Reviews");
 
+                    b.Navigation("WatchHistories");
+
                     b.Navigation("WishListItems");
                 });
 
@@ -1039,6 +1100,8 @@ namespace MovieHub.Migrations
             modelBuilder.Entity("MovieHub.Models.Series.Episode", b =>
                 {
                     b.Navigation("Player");
+
+                    b.Navigation("WatchHistories");
                 });
 
             modelBuilder.Entity("MovieHub.Models.Series.Season", b =>
@@ -1064,6 +1127,8 @@ namespace MovieHub.Migrations
                 {
                     b.Navigation("Detail")
                         .IsRequired();
+
+                    b.Navigation("WatchHistories");
 
                     b.Navigation("WishList");
 

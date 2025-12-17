@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieHub.Migrations
 {
     /// <inheritdoc />
-    public partial class INIT : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -570,7 +570,7 @@ namespace MovieHub.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EpisodeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EpisodeNumber = table.Column<int>(type: "int", nullable: false),
-                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     SeasonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -608,6 +608,40 @@ namespace MovieHub.Migrations
                         name: "FK_episodePlayers_languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WatchHistory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: true),
+                    EpisodeId = table.Column<int>(type: "int", nullable: true),
+                    WatchedSeconds = table.Column<int>(type: "int", nullable: false),
+                    TotalSeconds = table.Column<int>(type: "int", nullable: false),
+                    LastWatchedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WatchHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WatchHistory_episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "episodes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WatchHistory_movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "movies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WatchHistory_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -746,6 +780,21 @@ namespace MovieHub.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_WatchHistory_EpisodeId",
+                table: "WatchHistory",
+                column: "EpisodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WatchHistory_MovieId",
+                table: "WatchHistory",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WatchHistory_UserId",
+                table: "WatchHistory",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WishListItems_MovieId",
                 table: "WishListItems",
                 column: "MovieId");
@@ -806,13 +855,13 @@ namespace MovieHub.Migrations
                 name: "usersDetail");
 
             migrationBuilder.DropTable(
+                name: "WatchHistory");
+
+            migrationBuilder.DropTable(
                 name: "WishListItems");
 
             migrationBuilder.DropTable(
                 name: "directors");
-
-            migrationBuilder.DropTable(
-                name: "episodes");
 
             migrationBuilder.DropTable(
                 name: "libraries");
@@ -821,13 +870,16 @@ namespace MovieHub.Migrations
                 name: "movieDetails");
 
             migrationBuilder.DropTable(
+                name: "episodes");
+
+            migrationBuilder.DropTable(
                 name: "wishLists");
 
             migrationBuilder.DropTable(
-                name: "seasons");
+                name: "movies");
 
             migrationBuilder.DropTable(
-                name: "movies");
+                name: "seasons");
 
             migrationBuilder.DropTable(
                 name: "users");

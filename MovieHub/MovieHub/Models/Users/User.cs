@@ -1,5 +1,6 @@
 ﻿using MovieHub.Models.Librares;
 using MovieHub.Models.Reviews;
+using MovieHub.Models.WatchHistores;
 using MovieHub.Models.WishLists;
 
 namespace MovieHub.Models.Users
@@ -26,7 +27,9 @@ namespace MovieHub.Models.Users
 
         public List<Library> libraries {  get; set; }= new List<Library>();
 
-        public List<Review> reviews { get; set; }= new List<Review>();   
+        public List<Review> reviews { get; set; }= new List<Review>();
+
+        public List<WatchHistory> WatchHistories { get; set; } = new List<WatchHistory>();
 
 
     }
