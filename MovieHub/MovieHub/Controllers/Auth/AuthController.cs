@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BCrypt;
+using BCrypt.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieHub.Data;
 using MovieHub.Models.Users;
 using MovieHub.Requests;
 using MovieHub.Services;
+using MovieHub.SMTP;
 
 namespace MovieHub.Controllers.Auth
 {
@@ -13,10 +16,12 @@ namespace MovieHub.Controllers.Auth
     {
         private readonly DataContext _data;
         private readonly JwtService _Jwt;
-        public AuthController(DataContext data , JwtService jwt )
+        private readonly EmailSender _emailSender;
+        public AuthController(DataContext data , JwtService jwt, EmailSender emailSender )
         {
             _data = data;
             _Jwt = jwt;
+            _emailSender = emailSender;
 
         }
 
@@ -25,29 +30,40 @@ namespace MovieHub.Controllers.Auth
         [HttpPost("Registration")]
         public ActionResult Registration([FromBody] UserRequest req)
         {
-            User user = new User()
+
+         var existemail =req.Email;
+
+            if (_data.users.Any(x => x.Email == existemail))
+                return BadRequest("email is exist");
+
+            var code = new Random().Next(1000,100000).ToString();
+
+            User user = new User
             {
                 UserName = req.FirstName,
-                Email = req.Email,
-                Role = UserRole.User,
-                Password = req.Password,
-                DateOfBirth = req.DateOfBirth,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                Role =UserRole.User,
+                Email = existemail,
+                Password = BCrypt.Net.BCrypt.HashPassword(req.Password),
+                DateOfBirth =req.DateOfBirth,
+                CreatedAt= DateTime.Now,
+                UpdatedAt= DateTime.Now,    
+                VerifyCode = code,
                 VerifyCodeExpiresAt = DateTime.UtcNow.AddMinutes(5),
-                IsVerified = true,
-                IsActive = true,
-                VerifyCode = "2211",
+                IsVerified =false,
+                IsActive =true
                 
-
-
-
+               
             };
 
             _data.users.Add(user);
             _data.SaveChanges();
 
-            return Ok(user);
+
+            // Send verification email
+            _emailSender.SendMail(existemail, "Verification Code", $"Your code is: <b>{code}</b>");
+
+            return Ok("Registration successful. Check your email for verification code.");
+
         }
         #endregion
     }

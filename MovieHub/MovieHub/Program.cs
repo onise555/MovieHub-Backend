@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieHub.Data;
 using MovieHub.Services;
+using MovieHub.SMTP;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<EmailSender>();  
 
 
 //FluentValidator
