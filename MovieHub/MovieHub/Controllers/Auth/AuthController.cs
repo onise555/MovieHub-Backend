@@ -36,7 +36,7 @@ namespace MovieHub.Controllers.Auth
                 UpdatedAt = DateTime.Now,
                 VerifyCodeExpiresAt = DateTime.UtcNow.AddMinutes(5),
                 IsVerified = true,
-                isActive = true,
+                IsActive = true,
                 VerifyCode = "2211",
                 
 

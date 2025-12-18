@@ -10,7 +10,7 @@
 
         public TvSeries TvSeries { get; set; }
 
-        public List<Episode> episodes { get; set; } = new List<Episode>();  
+        public List<Episode> Episodes { get; set; } = new List<Episode>();  
 
 
 

@@ -2,4 +2,5 @@
 {
     Admin=0,
     User=1,
+    Moderator = 2
 }

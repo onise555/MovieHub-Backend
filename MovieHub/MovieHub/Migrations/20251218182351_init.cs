@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieHub.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,7 +95,9 @@ namespace MovieHub.Migrations
                     MovieName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CoverImg = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    ReleaseYear = table.Column<int>(type: "int", nullable: false)
+                    ReleaseYear = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,10 +110,12 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SerieName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeriesName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseYear = table.Column<int>(type: "int", nullable: false),
                     CoverImg = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    ReleasYear = table.Column<int>(type: "int", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,7 +136,7 @@ namespace MovieHub.Migrations
                     VerifyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VerifyCodeExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsVerified = table.Column<bool>(type: "bit", nullable: false),
-                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -169,15 +173,15 @@ namespace MovieHub.Migrations
                 name: "CountryMovie",
                 columns: table => new
                 {
-                    MoviesId = table.Column<int>(type: "int", nullable: false),
-                    countriesId = table.Column<int>(type: "int", nullable: false)
+                    CountriesId = table.Column<int>(type: "int", nullable: false),
+                    MoviesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CountryMovie", x => new { x.MoviesId, x.countriesId });
+                    table.PrimaryKey("PK_CountryMovie", x => new { x.CountriesId, x.MoviesId });
                     table.ForeignKey(
-                        name: "FK_CountryMovie_countries_countriesId",
-                        column: x => x.countriesId,
+                        name: "FK_CountryMovie_countries_CountriesId",
+                        column: x => x.CountriesId,
                         principalTable: "countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -217,15 +221,15 @@ namespace MovieHub.Migrations
                 name: "GenreMovie",
                 columns: table => new
                 {
-                    genresId = table.Column<int>(type: "int", nullable: false),
+                    GenresId = table.Column<int>(type: "int", nullable: false),
                     moviesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenreMovie", x => new { x.genresId, x.moviesId });
+                    table.PrimaryKey("PK_GenreMovie", x => new { x.GenresId, x.moviesId });
                     table.ForeignKey(
-                        name: "FK_GenreMovie_genres_genresId",
-                        column: x => x.genresId,
+                        name: "FK_GenreMovie_genres_GenresId",
+                        column: x => x.GenresId,
                         principalTable: "genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -241,15 +245,15 @@ namespace MovieHub.Migrations
                 name: "LanguageMovie",
                 columns: table => new
                 {
-                    languagesId = table.Column<int>(type: "int", nullable: false),
+                    LanguagesId = table.Column<int>(type: "int", nullable: false),
                     moviesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LanguageMovie", x => new { x.languagesId, x.moviesId });
+                    table.PrimaryKey("PK_LanguageMovie", x => new { x.LanguagesId, x.moviesId });
                     table.ForeignKey(
-                        name: "FK_LanguageMovie_languages_languagesId",
-                        column: x => x.languagesId,
+                        name: "FK_LanguageMovie_languages_LanguagesId",
+                        column: x => x.LanguagesId,
                         principalTable: "languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -267,7 +271,7 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     MovieId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -310,12 +314,12 @@ namespace MovieHub.Migrations
                 name: "CountryTvSeries",
                 columns: table => new
                 {
-                    TvSeriesId = table.Column<int>(type: "int", nullable: false),
-                    countriesId = table.Column<int>(type: "int", nullable: false)
+                    CountriesId = table.Column<int>(type: "int", nullable: false),
+                    TvSeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CountryTvSeries", x => new { x.TvSeriesId, x.countriesId });
+                    table.PrimaryKey("PK_CountryTvSeries", x => new { x.CountriesId, x.TvSeriesId });
                     table.ForeignKey(
                         name: "FK_CountryTvSeries_TvSeries_TvSeriesId",
                         column: x => x.TvSeriesId,
@@ -323,8 +327,8 @@ namespace MovieHub.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CountryTvSeries_countries_countriesId",
-                        column: x => x.countriesId,
+                        name: "FK_CountryTvSeries_countries_CountriesId",
+                        column: x => x.CountriesId,
                         principalTable: "countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -334,12 +338,12 @@ namespace MovieHub.Migrations
                 name: "DirectorTvSeries",
                 columns: table => new
                 {
-                    SerieDirectorsId = table.Column<int>(type: "int", nullable: false),
+                    SeriesDirectorsId = table.Column<int>(type: "int", nullable: false),
                     TvSeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DirectorTvSeries", x => new { x.SerieDirectorsId, x.TvSeriesId });
+                    table.PrimaryKey("PK_DirectorTvSeries", x => new { x.SeriesDirectorsId, x.TvSeriesId });
                     table.ForeignKey(
                         name: "FK_DirectorTvSeries_TvSeries_TvSeriesId",
                         column: x => x.TvSeriesId,
@@ -347,8 +351,8 @@ namespace MovieHub.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DirectorTvSeries_directors_SerieDirectorsId",
-                        column: x => x.SerieDirectorsId,
+                        name: "FK_DirectorTvSeries_directors_SeriesDirectorsId",
+                        column: x => x.SeriesDirectorsId,
                         principalTable: "directors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -358,12 +362,12 @@ namespace MovieHub.Migrations
                 name: "GenreTvSeries",
                 columns: table => new
                 {
-                    genresId = table.Column<int>(type: "int", nullable: false),
+                    GenresId = table.Column<int>(type: "int", nullable: false),
                     tvSeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenreTvSeries", x => new { x.genresId, x.tvSeriesId });
+                    table.PrimaryKey("PK_GenreTvSeries", x => new { x.GenresId, x.tvSeriesId });
                     table.ForeignKey(
                         name: "FK_GenreTvSeries_TvSeries_tvSeriesId",
                         column: x => x.tvSeriesId,
@@ -371,8 +375,8 @@ namespace MovieHub.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenreTvSeries_genres_genresId",
-                        column: x => x.genresId,
+                        name: "FK_GenreTvSeries_genres_GenresId",
+                        column: x => x.GenresId,
                         principalTable: "genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -382,12 +386,12 @@ namespace MovieHub.Migrations
                 name: "LanguageTvSeries",
                 columns: table => new
                 {
-                    languagesId = table.Column<int>(type: "int", nullable: false),
+                    LanguagesId = table.Column<int>(type: "int", nullable: false),
                     tvSeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LanguageTvSeries", x => new { x.languagesId, x.tvSeriesId });
+                    table.PrimaryKey("PK_LanguageTvSeries", x => new { x.LanguagesId, x.tvSeriesId });
                     table.ForeignKey(
                         name: "FK_LanguageTvSeries_TvSeries_tvSeriesId",
                         column: x => x.tvSeriesId,
@@ -395,8 +399,8 @@ namespace MovieHub.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LanguageTvSeries_languages_languagesId",
-                        column: x => x.languagesId,
+                        name: "FK_LanguageTvSeries_languages_LanguagesId",
+                        column: x => x.LanguagesId,
                         principalTable: "languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -429,7 +433,7 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -506,8 +510,8 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfileImg = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileImg = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -547,8 +551,8 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Video = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quality = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quality = table.Column<int>(type: "int", nullable: false),
                     MovieDetailId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -663,8 +667,8 @@ namespace MovieHub.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Video = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quality = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quality = table.Column<int>(type: "int", nullable: false),
                     EpisodeId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -730,14 +734,14 @@ namespace MovieHub.Migrations
                 column: "tvSeriesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CountryMovie_countriesId",
+                name: "IX_CountryMovie_MoviesId",
                 table: "CountryMovie",
-                column: "countriesId");
+                column: "MoviesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CountryTvSeries_countriesId",
+                name: "IX_CountryTvSeries_TvSeriesId",
                 table: "CountryTvSeries",
-                column: "countriesId");
+                column: "TvSeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DirectorMovie_MoviesId",
