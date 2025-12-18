@@ -10,9 +10,9 @@ namespace MovieHub.Models.Languages
 
         public string LanguageImg {  get; set; }   
         
-        public List<Movie> movies { get; set; } = new List<Movie>();
+        public List<Movie> Movies { get; set; } = new List<Movie>();
 
-        public List<TvSeries> tvSeries { get; set; } = new List<TvSeries>();    
+        public List<TvSeries> TvSeries { get; set; } = new List<TvSeries>();    
 
     }
 }

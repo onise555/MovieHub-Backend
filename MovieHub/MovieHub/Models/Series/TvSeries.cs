@@ -15,7 +15,7 @@ namespace MovieHub.Models.Series
         public string SeriesName { get; set; }
         public int ReleaseYear { get; set; }
         public string CoverImg { get; set; }        
-        public double Rating { get; set; }
+        public decimal Rating { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 

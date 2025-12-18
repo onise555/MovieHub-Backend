@@ -8,21 +8,19 @@ namespace MovieHub.Models.WatchHistores
     {
         public int Id { get; set; }
 
-
         public int UserId { get; set; }
         public User User { get; set; }
 
         public int? MovieId { get; set; }
-        public Movie Movie { get; set; }
+        public Movie? Movie { get; set; }
 
         public int? EpisodeId { get; set; }
-        public Episode Episode { get; set; }
-
+        public Episode? Episode { get; set; }
 
         public int WatchedSeconds { get; set; }
         public int TotalSeconds { get; set; }
 
-        public DateTime LastWatchedAt { get; set; }
+        public DateTime LastWatchedAt { get; set; } = DateTime.UtcNow;
 
     }
 }

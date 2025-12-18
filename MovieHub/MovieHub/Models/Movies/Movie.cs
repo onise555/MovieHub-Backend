@@ -18,15 +18,14 @@ namespace MovieHub.Models.Movies
 
         public string CoverImg { get; set; }    
 
-        public double Rating { get; set; }  
+        public decimal Rating { get; set; }  
 
         public int ReleaseYear { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-
+        
         public MovieDetail MovieDetail { get; set; }    
 
-      
         public List<WishListItems> WishListItems { get; set; } = new List<WishListItems>();
         public List<LibraryItems> LibraryItems { get; set; } = new List<LibraryItems>();   
         public List<Review> Reviews { get; set; } = new List<Review>();

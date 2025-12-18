@@ -11,11 +11,11 @@ namespace MovieHub.Models.Actors
         public string ActorName { get; set; }
         public DateTime DateOfBirth { get; set; }   
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public List<Movie> movies { get; set; } =new List<Movie>();
+        public List<Movie> Movies { get; set; } =new List<Movie>();
 
-        public List<TvSeries> tvSeries { get; set; } = new List<TvSeries>();    
+        public List<TvSeries> TvSeries { get; set; } = new List<TvSeries>();    
 
     }
 }

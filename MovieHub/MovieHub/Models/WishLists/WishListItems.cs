@@ -6,15 +6,17 @@ namespace MovieHub.Models.WishLists
     public class WishListItems
     {
         public int Id { get; set; }
-        public int WishListId { get; set; } 
-        public WishList wishList { get; set; }
 
-        public int? MovieId { get; set; }    
-        public Movie Movie { get; set; }
+        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
 
-        public int? SeriesId { get; set; }   
-        public TvSeries TvSeries { get; set; }  
+        public int WishListId { get; set; }
+        public WishList WishList { get; set; }
 
+        public int? MovieId { get; set; }
+        public Movie? Movie { get; set; }
+
+        public int? SeriesId { get; set; }
+        public TvSeries? TvSeries { get; set; }
 
 
 

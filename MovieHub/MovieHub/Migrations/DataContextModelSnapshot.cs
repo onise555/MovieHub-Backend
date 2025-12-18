@@ -27,12 +27,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("ActorsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("moviesId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ActorsId", "moviesId");
+                    b.HasKey("ActorsId", "MoviesId");
 
-                    b.HasIndex("moviesId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("ActorMovie");
                 });
@@ -42,12 +42,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("ActorsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("tvSeriesId")
+                    b.Property<int>("TvSeriesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ActorsId", "tvSeriesId");
+                    b.HasKey("ActorsId", "TvSeriesId");
 
-                    b.HasIndex("tvSeriesId");
+                    b.HasIndex("TvSeriesId");
 
                     b.ToTable("ActorTvSeries");
                 });
@@ -117,12 +117,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("GenresId")
                         .HasColumnType("int");
 
-                    b.Property<int>("moviesId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresId", "moviesId");
+                    b.HasKey("GenresId", "MoviesId");
 
-                    b.HasIndex("moviesId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("GenreMovie");
                 });
@@ -132,12 +132,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("GenresId")
                         .HasColumnType("int");
 
-                    b.Property<int>("tvSeriesId")
+                    b.Property<int>("TvSeriesId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresId", "tvSeriesId");
+                    b.HasKey("GenresId", "TvSeriesId");
 
-                    b.HasIndex("tvSeriesId");
+                    b.HasIndex("TvSeriesId");
 
                     b.ToTable("GenreTvSeries");
                 });
@@ -147,12 +147,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("LanguagesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("moviesId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
-                    b.HasKey("LanguagesId", "moviesId");
+                    b.HasKey("LanguagesId", "MoviesId");
 
-                    b.HasIndex("moviesId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("LanguageMovie");
                 });
@@ -162,12 +162,12 @@ namespace MovieHub.Migrations
                     b.Property<int>("LanguagesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("tvSeriesId")
+                    b.Property<int>("TvSeriesId")
                         .HasColumnType("int");
 
-                    b.HasKey("LanguagesId", "tvSeriesId");
+                    b.HasKey("LanguagesId", "TvSeriesId");
 
-                    b.HasIndex("tvSeriesId");
+                    b.HasIndex("TvSeriesId");
 
                     b.ToTable("LanguageTvSeries");
                 });
@@ -192,7 +192,6 @@ namespace MovieHub.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -322,6 +321,9 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("LibraryId")
                         .HasColumnType("int");
 
@@ -331,7 +333,7 @@ namespace MovieHub.Migrations
                     b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TvSeriesId")
+                    b.Property<int?>("TvSeriesId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -364,8 +366,8 @@ namespace MovieHub.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
@@ -597,8 +599,8 @@ namespace MovieHub.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
@@ -756,13 +758,16 @@ namespace MovieHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("MovieId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TvSeriesId")
+                    b.Property<int?>("TvSeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("WishListId")
@@ -789,7 +794,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Movies.Movie", null)
                         .WithMany()
-                        .HasForeignKey("moviesId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -804,7 +809,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", null)
                         .WithMany()
-                        .HasForeignKey("tvSeriesId")
+                        .HasForeignKey("TvSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -879,7 +884,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Movies.Movie", null)
                         .WithMany()
-                        .HasForeignKey("moviesId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -894,7 +899,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", null)
                         .WithMany()
-                        .HasForeignKey("tvSeriesId")
+                        .HasForeignKey("TvSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -909,7 +914,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Movies.Movie", null)
                         .WithMany()
-                        .HasForeignKey("moviesId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -924,7 +929,7 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", null)
                         .WithMany()
-                        .HasForeignKey("tvSeriesId")
+                        .HasForeignKey("TvSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -942,7 +947,7 @@ namespace MovieHub.Migrations
 
             modelBuilder.Entity("MovieHub.Models.Librares.LibraryItems", b =>
                 {
-                    b.HasOne("MovieHub.Models.Librares.Library", "library")
+                    b.HasOne("MovieHub.Models.Librares.Library", "Library")
                         .WithMany("LibraryItems")
                         .HasForeignKey("LibraryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -954,15 +959,13 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", "TvSeries")
                         .WithMany("LibraryItems")
-                        .HasForeignKey("TvSeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TvSeriesId");
+
+                    b.Navigation("Library");
 
                     b.Navigation("Movie");
 
                     b.Navigation("TvSeries");
-
-                    b.Navigation("library");
                 });
 
             modelBuilder.Entity("MovieHub.Models.Movies.MovieDetail", b =>
@@ -1125,11 +1128,9 @@ namespace MovieHub.Migrations
 
                     b.HasOne("MovieHub.Models.Series.TvSeries", "TvSeries")
                         .WithMany("WishListItems")
-                        .HasForeignKey("TvSeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TvSeriesId");
 
-                    b.HasOne("MovieHub.Models.WishLists.WishList", "wishList")
+                    b.HasOne("MovieHub.Models.WishLists.WishList", "WishList")
                         .WithMany("WishListItems")
                         .HasForeignKey("WishListId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1139,7 +1140,7 @@ namespace MovieHub.Migrations
 
                     b.Navigation("TvSeries");
 
-                    b.Navigation("wishList");
+                    b.Navigation("WishList");
                 });
 
             modelBuilder.Entity("MovieHub.Models.Librares.Library", b =>
