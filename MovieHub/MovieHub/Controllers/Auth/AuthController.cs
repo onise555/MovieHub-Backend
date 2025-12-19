@@ -65,6 +65,30 @@ namespace MovieHub.Controllers.Auth
             return Ok("Registration successful. Check your email for verification code.");
 
         }
+
+        [HttpPost("Verification")]
+
+        public ActionResult Verification( Verify req)
+        {
+            string email = null;
+            var user = _data.users.Where(x=>x.Email==x.Email).FirstOrDefault();
+
+
+            if (user == null) 
+                return BadRequest();
+            if (DateTime.UtcNow > user.VerifyCodeExpiresAt)
+                return BadRequest("time is end try agine");
+
+            if (user.VerifyCode == req.Code)
+            {
+                user.IsVerified = true;
+                user.VerifyCode = null;
+                _data.SaveChanges();
+                return Ok("Email verified successfully!");
+            }
+
+            return BadRequest("This Email Not Founded");
+        }
         #endregion
     }
 }
