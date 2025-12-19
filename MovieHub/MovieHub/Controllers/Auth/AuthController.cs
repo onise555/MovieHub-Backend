@@ -67,11 +67,10 @@ namespace MovieHub.Controllers.Auth
         }
 
         [HttpPost("Verification")]
-
-        public ActionResult Verification( Verify req)
+        public ActionResult Verification(Verify req)
         {
-            string email = null;
-            var user = _data.users.Where(x=>x.Email==x.Email).FirstOrDefault();
+
+            var user = _data.users.FirstOrDefault(x => x.Email == req.Email);
 
 
             if (user == null) 
