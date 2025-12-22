@@ -88,6 +88,41 @@ namespace MovieHub.Controllers.Auth
 
             return BadRequest("This Email Not Founded");
         }
+
+
+        [HttpPost("ResendCode")]
+        public ActionResult ResendCode(ResendCodeRequest req)
+        {
+            var user = _data.users.FirstOrDefault(x=>x.Email == req.Email); 
+
+            if(user == null)
+                return BadRequest("User Not Founded");
+
+            if (user.IsVerified==true)
+                return BadRequest("User Alredy Valid");
+
+            Random random = new Random();
+            var code = random.Next(1000, 100000).ToString();
+
+            var NewCode = user.VerifyCode = code;
+            user.VerifyCodeExpiresAt = DateTime.UtcNow.AddMinutes(1);
+           
+
+           _data.SaveChanges();
+   
+
+            if(user.VerifyCode == NewCode)
+            {
+                user.IsVerified=true;
+                user.VerifyCode = null;
+            }
+        
+
+            _emailSender.SendMail(user.Email,"Resnd",$"{NewCode}");
+
+            return Ok("New verification code sent successfully ");
+
+        }
         #endregion
     }
 }
