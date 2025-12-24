@@ -123,6 +123,41 @@ namespace MovieHub.Controllers.Auth
             return Ok("New verification code sent successfully ");
 
         }
+
+
+        [HttpPost("Login")]
+        public ActionResult Login([FromBody] LoginRequest req)
+        {
+            var user = _data.users.FirstOrDefault(x => x.Email == req.Email);
+
+            if (user == null)
+                return BadRequest("User not found");
+
+            if (!user.IsVerified)
+                return BadRequest("Please verify your email before logging in.");
+
+            if (!user.IsActive)
+                return BadRequest("User is deactivated");
+
+            var isValid = BCrypt.Net.BCrypt.Verify(req.Password, user.Password);
+            if (!isValid)
+                return BadRequest("Invalid password");
+
+            var token = _Jwt.GenerateToken(user.Id, user.UserName, new List<UserRole> { user.Role });
+
+            return Ok(new
+            {
+                Message = "Login successful",
+                Token = token,
+                User = new
+                {
+                    user.Id,
+                    user.UserName,
+                    user.Email,
+                    Role = user.Role.ToString()
+                }
+            });
+        }
         #endregion
     }
 }
