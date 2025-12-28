@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieHub.Data;
 using MovieHub.Models.Users;
-using MovieHub.Requests;
+using MovieHub.Requests.AuthRequests;
 using MovieHub.Services;
 using MovieHub.SMTP;
 
@@ -157,6 +157,29 @@ namespace MovieHub.Controllers.Auth
                     Role = user.Role.ToString()
                 }
             });
+        }
+
+        [HttpPost("Forgot-Password")]
+        public ActionResult ForgotPassword([FromBody] ForgotPasswordRequest req)
+        {
+            var user =_data.users.FirstOrDefault(x=>x.Email==req.Email);
+
+            if (user == null)
+                return BadRequest("User Not Founded");
+
+            if (!user.IsVerified)
+                return BadRequest("User email is not verified");
+            var code =new Random().Next(100000, 1000000).ToString();
+            user.VerifyCode = code; 
+            user.VerifyCodeExpiresAt= DateTime.UtcNow.AddMinutes(5);
+
+            _data.SaveChanges();
+
+
+            _emailSender.SendMail(user.Email, "Password Reset Code", $"Your reset code is: <b>{code}</b>");
+
+            return Ok(new { message = "Password reset code sent to your email." });
+
         }
         #endregion
     }
