@@ -1,4 +1,4 @@
-﻿namespace MovieHub.Requests
+﻿namespace MovieHub.Requests.AuthRequests
 {
     public class ResendCodeRequest
     {
