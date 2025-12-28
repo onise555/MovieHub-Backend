@@ -181,6 +181,30 @@ namespace MovieHub.Controllers.Auth
             return Ok(new { message = "Password reset code sent to your email." });
 
         }
+
+        [HttpPost("Reset-Password")]
+        public ActionResult ResetPassword([FromBody] ResetPasswordRequest req)
+        {
+            var user = _data.users.FirstOrDefault(x => x.VerifyCode == req.Code);
+
+            if(user == null)
+                return BadRequest("nvalid reset code");
+
+            if (DateTime.UtcNow > user.VerifyCodeExpiresAt)
+                return BadRequest("Reset code expired");
+
+            user.Password=BCrypt.Net.BCrypt.HashPassword(req.NewPassword);
+            user.VerifyCode = null;
+            user.VerifyCodeExpiresAt = null;
+
+            _data.SaveChanges();
+
+            _emailSender.SendMail(user.Email, "Password Changed", "Your password has been successfully reset.");
+
+            return Ok(new { message = "Password has been reset successfully." });
+
+
+        }
         #endregion
     }
 }
