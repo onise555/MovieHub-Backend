@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieHub.Data;
+using MovieHub.Dtos.AdminMovieDtos;
 using MovieHub.Models.Movies;
 using MovieHub.Requests.AdminMoviesRequests;
 
@@ -8,6 +10,7 @@ namespace MovieHub.Controllers.AdminMovies
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class AdminMoviesController : ControllerBase
     {
         private readonly DataContext _data;
@@ -36,6 +39,25 @@ namespace MovieHub.Controllers.AdminMovies
             _data.SaveChanges();
 
             return Ok(movie);   
+        }
+
+
+        [HttpGet("Movies")]
+        public ActionResult GetMovies()
+        {
+
+            var moivies = _data.movies.Select(x=> new MoviesDtos
+            {
+                Id = x.Id,
+                MovieName = x.MovieName,
+                CoverImg = x.CoverImg,
+                ReleaseYear = x.ReleaseYear,
+                Rating = x.Rating,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+            }).ToList();
+
+            return Ok(moivies); 
         }
     }
 }
