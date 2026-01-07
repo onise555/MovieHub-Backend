@@ -10,7 +10,7 @@ namespace MovieHub.Controllers.AdminMovies
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin")]
+
     public class AdminMoviesController : ControllerBase
     {
         private readonly DataContext _data;
@@ -58,6 +58,22 @@ namespace MovieHub.Controllers.AdminMovies
             }).ToList();
 
             return Ok(moivies); 
+        }
+
+
+        [HttpDelete("Delete-Movie/{id}")]
+        public ActionResult DeleteMovie(int id)
+        {
+            var movies = _data.movies.FirstOrDefault(x => x.Id == id);
+
+            _data.movies.Remove(movies);    
+            _data.SaveChanges();
+
+            var delmoviesDto = new DeleteMovieDtos
+            {
+                Id = movies.Id
+            };
+            return Ok(delmoviesDto);
         }
     }
 }
