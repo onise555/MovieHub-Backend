@@ -75,5 +75,9 @@ namespace MovieHub.Controllers.AdminMovies
             };
             return Ok(delmoviesDto);
         }
+
+
+
+
     }
 }
