@@ -58,7 +58,6 @@ namespace MovieHub.Controllers.UserControllers
 
 
         //Update User
-
         [HttpPut("Update-User/{id}")]
         public ActionResult UpdateUser(int id ,UpdateRequest req)
         {
