@@ -27,7 +27,7 @@ namespace MovieHub.Controllers.UserControllers
         }
 
 
-
+        //Get User
         [HttpGet("Get-User/{id}")]
         public ActionResult GetUser(int id)
         {
