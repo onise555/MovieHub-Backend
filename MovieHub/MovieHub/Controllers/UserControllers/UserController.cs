@@ -57,8 +57,7 @@ namespace MovieHub.Controllers.UserControllers
         }
 
         [HttpPut("Update-User/{id}")]
-
-        public ActionResult UpdateUser(int id ,UpdateUserRequest req)
+        public   ActionResult UpdateUser(int id ,UpdateRequest req)
         {
 
             var currenUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -73,11 +72,11 @@ namespace MovieHub.Controllers.UserControllers
             user.UserName = req.UserName;   
             user.DateOfBirth = req.DateOfBirth; 
             user.Email = req.Email;
-            user.UpdatedAt = req.UpdateAt;
+            user.UpdatedAt = DateTime.UtcNow;
 
             _data.SaveChanges();
 
-            _sender.SendMail(user.Email, "Update Profile", "pr");
+             _sender.SendMail(user.Email, "Update Profile", "Your profile has been successfully updated.");
 
             var updateurdt = new UpdateUserDtos
             {
@@ -85,7 +84,7 @@ namespace MovieHub.Controllers.UserControllers
                 UserName = req.UserName,
                 DateOfBirth = req.DateOfBirth,
                 Email = req.Email,
-                UpdateAt = req.UpdateAt,
+                UpdateAt = user.UpdatedAt,
             };
 
             return Ok(updateurdt);  
