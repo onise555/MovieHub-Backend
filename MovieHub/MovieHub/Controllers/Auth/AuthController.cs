@@ -25,6 +25,7 @@ namespace MovieHub.Controllers.Auth
 
         }
 
+     
         #region
 
         [HttpPost("Registration")]

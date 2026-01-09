@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieHub.Data;
 using MovieHub.Dtos.UserDtos;
+using MovieHub.Requests.UserRequests;
 using MovieHub.Services;
 using MovieHub.SMTP;
 using System.Security.Claims;
@@ -55,7 +56,40 @@ namespace MovieHub.Controllers.UserControllers
             return Ok(userdt);
         }
 
+        [HttpPut("Update-User/{id}")]
 
+        public ActionResult UpdateUser(int id ,UpdateUserRequest req)
+        {
+
+            var currenUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (currenUserId != id)
+                return Forbid();
+
+            var user = _data.users.FirstOrDefault(x => x.Id == id);
+
+            if (_data.users.Any(x => x.Email == req.Email && x.Id != id))
+                return BadRequest("Email is already in use.");
+
+            user.UserName = req.UserName;   
+            user.DateOfBirth = req.DateOfBirth; 
+            user.Email = req.Email;
+            user.UpdatedAt = req.UpdateAt;
+
+            _data.SaveChanges();
+
+            _sender.SendMail(user.Email, "Update Profile", "pr");
+
+            var updateurdt = new UpdateUserDtos
+            {
+                Id = user.Id,
+                UserName = req.UserName,
+                DateOfBirth = req.DateOfBirth,
+                Email = req.Email,
+                UpdateAt = req.UpdateAt,
+            };
+
+            return Ok(updateurdt);  
+        }
 
 
     }
