@@ -33,7 +33,7 @@ namespace MovieHub.Services
 
             var token = new JwtSecurityToken(
                 issuer: JwtSettings["Issuer"],
-                audience: JwtSettings["Audiance"],
+                 audience: JwtSettings["Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(double.Parse(JwtSettings["ExpireInMinutes"])),
                 signingCredentials:creds
