@@ -56,8 +56,11 @@ namespace MovieHub.Controllers.UserControllers
             return Ok(userdt);
         }
 
+
+        //Update User
+
         [HttpPut("Update-User/{id}")]
-        public   ActionResult UpdateUser(int id ,UpdateRequest req)
+        public ActionResult UpdateUser(int id ,UpdateRequest req)
         {
 
             var currenUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -89,6 +92,10 @@ namespace MovieHub.Controllers.UserControllers
 
             return Ok(updateurdt);  
         }
+
+
+
+
 
 
     }
