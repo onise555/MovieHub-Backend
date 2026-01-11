@@ -44,7 +44,7 @@ namespace MovieHub.Controllers.AdminMovies
             _data.movies.Add(movie);
             await _data.SaveChangesAsync();
 
-            var fullImgUrl = $"{Request.Host}{imgPath}";
+            var fullImgUrl = $"{Request.Scheme}://{Request.Host}{imgPath}";
 
             return Ok(new
             {
