@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieHub.Data;
 using MovieHub.Dtos.AdminMovieDtos;
+using MovieHub.FileStreams;
 using MovieHub.Models.Movies;
 using MovieHub.Requests.AdminMoviesRequests;
 
@@ -22,23 +23,38 @@ namespace MovieHub.Controllers.AdminMovies
 
 
         [HttpPost("Add-Movies")]
-        public ActionResult AddMovie(CreateMovieRequest req)
+        public async Task<IActionResult> AddMovie([FromForm] CreateMovieRequest req)
         {
+
+
+            var imgPath = await FileUploader.UploadImg(
+           req.CoverImg,
+           "uploads/movies"
+       );
             Movie movie = new Movie()
             {
                MovieName = req.MovieName,
-               CoverImg = req.CoverImg, 
+               CoverImg = imgPath, 
                ReleaseYear = req.ReleaseYear,   
                Rating = req.Rating,
-               CreatedAt = req.CreatedAt,
-               UpdatedAt = req.UpdatedAt,   
+               CreatedAt = DateTime.Now,  
               
             };
 
             _data.movies.Add(movie);
-            _data.SaveChanges();
+            await _data.SaveChangesAsync();
 
-            return Ok(movie);   
+            var fullImgUrl = $"{Request.Host}{imgPath}";
+
+            return Ok(new
+            {
+               movie.MovieName,
+               movie.ReleaseYear,
+               movie.Rating,
+                ImageUrl = fullImgUrl
+            }); 
+            
+
         }
 
 
